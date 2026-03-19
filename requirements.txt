@@ -8,3 +8,6 @@ redis
 pydantic
 pydantic_settings
 python-dotenv
+pytest
+httpx
+locust

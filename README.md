@@ -251,3 +251,17 @@ GET /links/abc123/stats
 * Uvicorn
 
 ---
+
+
+# Тесты
+
+## Установка
+```bash
+pip install pytest locust httpx
+```
+
+## Запуск
+
+1. pytest --cov=app --cov-report=term-missing 
+2. pytest --cov=app --cov-report=html
+3. locust

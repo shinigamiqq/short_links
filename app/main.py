@@ -1,3 +1,6 @@
+import time
+from sqlalchemy.exc import OperationalError
+
 from fastapi import FastAPI, Depends
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
@@ -15,7 +18,21 @@ import app.models
 
 app = FastAPI()
 
-Base.metadata.create_all(bind=engine)
+
+def wait_for_db(engine, retries=10, delay=2):
+    for _ in range(retries):
+        try:
+            with engine.connect():
+                return
+        except OperationalError:
+            time.sleep(delay)
+    raise Exception("Databse is not ready")
+
+
+@app.on_event("startup")
+def startup():
+    wait_for_db(engine)
+    Base.metadata.create_all(bind=engine)
 
 app.include_router(links_router)
 
